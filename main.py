@@ -21,13 +21,13 @@ class Calculadora(QMainWindow):
         self.add_button(QPushButton("8"), 1, 1, 1, 1)
         self.add_button(QPushButton("9"), 1, 2, 1, 1)
         self.add_button(QPushButton("+"),  1, 3, 1, 1)
-        self.add_button(QPushButton("C"),  1, 4, 1, 1, lambda: self.display.setText(''))
+        self.add_button(QPushButton("C"),  1, 4, 1, 1, lambda: self.display.setText(''), 'background: #d5580d; font-weight: 700; color: #FFF')
 
         self.add_button(QPushButton("4"), 2, 0, 1, 1)
         self.add_button(QPushButton("5"), 2, 1, 1, 1)
         self.add_button(QPushButton("6"), 2, 2, 1, 1)
         self.add_button(QPushButton("-"),  2, 3, 1, 1)
-        self.add_button(QPushButton("<-"),  2, 4, 1, 1, lambda: self.display.setText(self.display.text()[:-1]))
+        self.add_button(QPushButton("<-"),  2, 4, 1, 1, lambda: self.display.setText(self.display.text()[:-1]), 'background: #13823a; font-weight: 700; color: #FFF')
 
         self.add_button(QPushButton("1"), 3, 0, 1, 1)
         self.add_button(QPushButton("2"), 3, 1, 1, 1)
@@ -39,12 +39,12 @@ class Calculadora(QMainWindow):
         self.add_button(QPushButton("0"), 4, 1, 1, 1)
         self.add_button(QPushButton(","), 4, 2, 1, 1)
         self.add_button(QPushButton("*"), 4, 3, 1, 1)
-        self.add_button(QPushButton("="),  4, 4, 1, 1, self.eval_igual)
+        self.add_button(QPushButton("="),  4, 4, 1, 1, self.eval_igual, 'background: #095177;font-weight: 700; color: #FFF')
 
 
         self.setCentralWidget(self.cw)
 
-    def add_button(self, btn, row, col, rowspan, colspan, funcao=None):
+    def add_button(self, btn, row, col, rowspan, colspan, funcao=None, style=None):
         self.grid.addWidget(btn, row, col,rowspan, colspan)
         if not funcao:
             btn.clicked.connect(lambda: self.display.setText(
@@ -52,6 +52,9 @@ class Calculadora(QMainWindow):
             ))
         else:
             btn.clicked.connect(funcao)
+
+        if style:
+            btn.setStyleSheet(style)
         btn.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
 
     def eval_igual(self):
