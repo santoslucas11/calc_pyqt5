@@ -13,19 +13,54 @@ class Calculadora(QMainWindow):
         self.display = QLineEdit()
         self.grid.addWidget(self.display, 0, 0, 1, 5)
         self.display.setDisabled(True)
-        self.setStyleSheet(
+        self.display.setStyleSheet(
             '*{background: #FFF; color: #000; font-size:30px;}'
         )
         self.display.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        self.add_button(QPushButton("7"), 1,0,1,1)
+        self.add_button(QPushButton("7"), 1, 0, 1, 1)
+        self.add_button(QPushButton("8"), 1, 1, 1, 1)
+        self.add_button(QPushButton("9"), 1, 2, 1, 1)
+        self.add_button(QPushButton("+"),  1, 3, 1, 1)
+        self.add_button(QPushButton("C"),  1, 4, 1, 1, lambda: self.display.setText(''))
+
+        self.add_button(QPushButton("4"), 2, 0, 1, 1)
+        self.add_button(QPushButton("5"), 2, 1, 1, 1)
+        self.add_button(QPushButton("6"), 2, 2, 1, 1)
+        self.add_button(QPushButton("-"),  2, 3, 1, 1)
+        self.add_button(QPushButton("<-"),  2, 4, 1, 1, lambda: self.display.setText(self.display.text()[:-1]))
+
+        self.add_button(QPushButton("1"), 3, 0, 1, 1)
+        self.add_button(QPushButton("2"), 3, 1, 1, 1)
+        self.add_button(QPushButton("3"), 3, 2, 1, 1)
+        self.add_button(QPushButton("/"), 3, 3, 1, 1)
+        self.add_button(QPushButton(""),  3, 4, 1, 1)
+
+        self.add_button(QPushButton("."), 4, 0, 1, 1)
+        self.add_button(QPushButton("0"), 4, 1, 1, 1)
+        self.add_button(QPushButton(","), 4, 2, 1, 1)
+        self.add_button(QPushButton("*"), 4, 3, 1, 1)
+        self.add_button(QPushButton("="),  4, 4, 1, 1, self.eval_igual)
+
 
         self.setCentralWidget(self.cw)
 
-    def add_button(self, btn, row, col, rowspan, colspan):
+    def add_button(self, btn, row, col, rowspan, colspan, funcao=None):
         self.grid.addWidget(btn, row, col,rowspan, colspan)
-        btn.clicked.connect(lambda: self.display.setText(
-            self.display.text() + btn.text()
-        ))
+        if not funcao:
+            btn.clicked.connect(lambda: self.display.setText(
+                self.display.text() + btn.text()
+            ))
+        else:
+            btn.clicked.connect(funcao)
+        btn.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+
+    def eval_igual(self):
+        try:
+            self.display.setText(
+                str(eval(self.display.text()))
+            )
+        except Exception as e:
+            self.display.setText('Conta inválida')
 
 if __name__ == '__main__':
     qt = QApplication(sys.argv)
